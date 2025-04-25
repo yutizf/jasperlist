@@ -1,13 +1,13 @@
 package com.fernandoyutiz.jasperlist.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -36,4 +36,13 @@ public class TestDTO {
     public String getExcluirDTO() {
         return null;
     }
+
+    @Getter
+    @JsonAlias("direcciones_dto")
+    private List<DireccionDTO> direcciones;
+
+    @Getter
+    @JsonAlias("hobbies")
+    private List<String> hobbiesDTO;
+
 }

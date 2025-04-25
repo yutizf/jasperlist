@@ -3,7 +3,9 @@ package com.fernandoyutiz.jasperlist.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fernandoyutiz.jasperlist.Errores;
 import com.fernandoyutiz.jasperlist.Persona;
+import com.fernandoyutiz.jasperlist.dto.DireccionDTO;
 import com.fernandoyutiz.jasperlist.dto.TestDTO;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.eclipse.jdt.internal.compiler.parser.Parser.name;
-
 @RestController
 @RequestMapping("/api/v1")
 
 public class JsonController {
     private static final Boolean error = false;
 
+    @CrossOrigin
     @GetMapping("/json")
     public ResponseEntity<Persona> helloJson(){
         Persona persona = new Persona();
@@ -63,16 +64,38 @@ public class JsonController {
         return json.toString();
     }
 
-    @GetMapping("/testdto")
+    @CrossOrigin(origins = {"http://127.0.0.1:5500"})
+    @GetMapping(value = "/testdto", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TestDTO> testdto(){
+        List<String> hobbies = new ArrayList<>();
+        hobbies.add("programacion");
+        hobbies.add("electronica");
+        hobbies.add("musica");
+
         Map<String, Object> ds = new HashMap<>();
         ds.put("lastname", "Yutiz");
-        ds.put("firstname", "Fernando");
+        ds.put("firstname", "Fernando Daniel");
         ds.put("age", 55);
-        //ds.put("profession", "Programador");
+        ds.put("profession", "Programador");
         ds.put("excluir", "EXCLUIDO" );
-        ObjectMapper mapper = new ObjectMapper();
-        TestDTO dto = mapper.convertValue(ds, TestDTO.class);
-        return ResponseEntity.ok(dto);
+        ds.put("hobbies", hobbies);
+
+        List<DireccionDTO> direccionDTOList = new ArrayList<>();
+        DireccionDTO direccionDTO = new DireccionDTO();
+        direccionDTO.setCalleDTO("Juan Agustin Garcia");
+        direccionDTO.setNumeroDTO("2752");
+        direccionDTO.setPisoDTO("7");
+        direccionDTO.setDeptoDTO("B");
+        direccionDTO.setBarrioDTO("Villa Santa Rita");
+        direccionDTOList.add(direccionDTO);
+        DireccionDTO direccionDTO2 = new DireccionDTO();
+        direccionDTO2.setCalleDTO("San Blas");
+        direccionDTO2.setNumeroDTO("2984");
+        direccionDTO2.setPisoDTO("6");
+        direccionDTO2.setDeptoDTO("C");
+        direccionDTOList.add(direccionDTO2);
+        ds.put("direcciones_dto", direccionDTOList);
+        TestDTO dto1 = new ObjectMapper().convertValue(ds, TestDTO.class);
+        return ResponseEntity.ok(dto1);
     }
 }
